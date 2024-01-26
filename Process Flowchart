@@ -5,16 +5,18 @@ flowchart TD
         code(Enter Passcode)
         auth(Authenticate Passcode)
         resident --> code --> auth 
-        req(Request access)
-        guest --> req -- temporary passcode --> code
+        %%req(Request access)
+        %%guest --> req -- temporary passcode --> code
         auth -- invalid --> code
+        guest -- OTP --> code
     end
     
     subgraph INDOOR
-        button(Press Button)
+        button(Press Unlock Button)
         sense(Sense Person) 
         face(Facial Recognition) 
         rfid(NFC/RFID device)
+        server(Server)
         sense --> face -- unrecognized --> button
         sense --> rfid -- unrecognized --> button
     end
@@ -23,9 +25,14 @@ flowchart TD
         list("Fire
         Earthquake")
     end
+
     open(Open Door)
 
     auth -- valid --> open
-    button & face & rfid ---> open
-    req -- remote access --> open
+    face & rfid --> open
+    button --> open
+    %%req -- remote access --> open
     list ----> open
+    auth -- Alert in case of failure --> server
+    guest -- Request access --> server
+    server -- OTP --> guest
