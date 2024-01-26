@@ -21,10 +21,13 @@ int readBtnState(){
 }
 
 
-void unlockDoor(){
+void unlockDoor() //unlocks the door and then lock the door again after a certain time
+{
   digitalWrite(solenoid_pin, HIGH);
-  delay(3000);
+  digitalWrite(13, HIGH);
+  delay(2000);
   digitalWrite(solenoid_pin, LOW);
+  digitalWrite(13, LOW);
 }
 
 void lockDoor(){
