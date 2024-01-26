@@ -1,0 +1,31 @@
+flowchart TD
+    subgraph OUTDOOR
+        resident(RESIDENT)
+        guest(GUEST)
+        code(Enter Passcode)
+        auth(Authenticate Passcode)
+        resident --> code --> auth 
+        req(Request access)
+        guest --> req -- temporary passcode --> code
+        auth -- invalid --> code
+    end
+    
+    subgraph INDOOR
+        button(Press Button)
+        sense(Sense Person) 
+        face(Facial Recognition) 
+        rfid(NFC/RFID device)
+        sense --> face -- unrecognized --> button
+        sense --> rfid -- unrecognized --> button
+    end
+
+    subgraph EMERGENCY
+        list("Fire
+        Earthquake")
+    end
+    open(Open Door)
+
+    auth -- valid --> open
+    button & face & rfid ---> open
+    req -- remote access --> open
+    list ----> open
