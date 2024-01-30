@@ -1,0 +1,43 @@
+classDiagram
+    Sensor -- Door State
+    Sensor -- Human Presence
+    Sensor -- Fire Hazard
+
+    Door State -- Vibration Sensor
+    Door State -- Reed Sensor
+
+    Human Presence -- Millimeter Wave Sensor
+    Human Presence -- Weight Sensor
+    Human Presence -- Camera
+    
+    Fire Hazard -- IR Sensor
+    Fire Hazard -- Smoke Detector
+    Fire Hazard -- Temperature Sensor
+
+    class Vibration Sensor{
+        Sample vibration in the door 
+        Detect physical assult
+         - magnitude
+         - time
+    }
+
+    class Reed Sensor{
+        Sample door State
+        Detect open door
+         - time
+    }
+
+    class Millimeter Wave Sensor{
+        Accurately detect human
+        24GHz radar
+        Strong anti-interferance
+         - Temperature
+         - Light
+         - Dust
+         - Humidity
+        Low current requirement
+    }
+
+    class Weight Sensor{
+        Detect human in close presence
+    }
