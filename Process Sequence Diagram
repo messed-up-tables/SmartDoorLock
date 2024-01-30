@@ -1,0 +1,47 @@
+sequenceDiagram
+    
+    actor g as Guest
+    actor r as Resident
+    participant i as Sensor
+    participant c as Controller
+    participant a as Actuator
+    participant s as Server
+
+    note over g,s : Case 1 (Resident from OUTSIDE)
+    r->>i: Enter code
+    i->>c: Send code
+    c->>c: Authenticate code
+    alt ALLOWED
+    c->>a: Open door
+    else NOT ALLOWED
+    c->>a: Deny Access
+    end
+
+    note over g,s : Case 2 (GUEST from OUTSIDE)
+    g->>r: Request access
+    r->>s: Request OPT
+    s->>r: Generate OPT
+    s-->>c: OTP
+    r->>g: Share OTP
+    g->>i: Enter code
+    i->>c: Send code
+    c->>c: Authenticate code
+    alt ALLOWED
+    c->>a: Open door
+    else NOT ALLOWED
+    c->>a: Deny Access
+    end
+
+    note over g,s : Case 3 (from INSIDE)
+    r->i: Sense person
+    i->>c: Notify
+    c->>a: Open door
+
+    note over g,s : Case 4 (EMERGENCY)
+    loop Data sampling
+    i->>s: Enviroment data
+    s->>s: Process data
+    end
+    s->>s: Detect emergency
+    s-->>c: Alert emergency
+    c->>a: Open door
