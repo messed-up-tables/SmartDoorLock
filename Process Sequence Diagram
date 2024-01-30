@@ -45,3 +45,12 @@ sequenceDiagram
     s->>s: Detect emergency
     s-->>c: Alert emergency
     c->>a: Open door
+
+    note over g,s : Case 5 (SECURITY BREACH)
+    loop Data sampling
+    i->>c: Door state
+    c->>c: Process data
+    end
+    c->>c: Detect security breach
+    c-->>s: Alert
+    s->>r: Notify Security Breach
