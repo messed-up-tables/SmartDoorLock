@@ -1,16 +1,22 @@
 
-NANO		-		MODULES
-1
-2
-3
-4
-5
-6
-7
-8
----------------------- RFID Module
-9	-	RST (changeable)
-10	-	SS (changeable)
-11	-	MOSI
-12	-	MISO
-13	-	SCK
+NANO	-	MODULES
+1	-	keypad
+2	-	keypad
+3	-	keypad
+4	-	keypad
+5	-	keypad
+6	-	keypad
+7	-	keypad
+8	-	keypad
+9	-	motor PWM
+10	-	rfid SS (changeable)
+11	-	rfid MOSI
+12	-	rfid MISO
+13	-	rfid SCK
+A1	-	rfid RST (changeable)
+A2	-	
+A3	-	vibration sensor (changeable)
+A4	-	lcd SDA
+A5	-	lcd SCL
+A6	-	reed switch (changeable)
+A7	-	push button
