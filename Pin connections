@@ -9,8 +9,8 @@ NANO		-		MODULES
 7
 8
 ---------------------- RFID Module
-9		-	RST
-10	-	SS
+9	-	RST (changeable)
+10	-	SS (changeable)
 11	-	MOSI
 12	-	MISO
 13	-	SCK
