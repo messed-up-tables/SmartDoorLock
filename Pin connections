@@ -1,0 +1,24 @@
+
+NANO	-	MODULES
+0	-	Serial
+1	-	Serial
+2	-	keypad
+3	-	keypad
+4	-	keypad
+5	-	keypad
+6	-	keypad
+7	-	keypad
+8	-	rfid RST
+9	-	motor PWM
+10	-	rfid SS 
+11	-	rfid MOSI
+12	-	rfid MISO
+13	-	rfid SCK
+A0	-	solenoid
+A1	-	
+A2	-	push
+A3	-	reed
+A4	-	lcd SDA
+A5	-	lcd SCL
+A6	-	keypad
+A7	-	keypad
