@@ -14,11 +14,11 @@ NANO	-	MODULES
 11	-	rfid MOSI
 12	-	rfid MISO
 13	-	rfid SCK
-A0	-	keypad
-A1	-	keypad
-A2	-	
-A3	-	vibration sensor (changeable)
+A0	-	solenoid
+A1	-	
+A2	-	push
+A3	-	reed
 A4	-	lcd SDA
 A5	-	lcd SCL
-A6	-	reed switch (changeable)
-A7	-	push button
+A6	-	keypad
+A7	-	keypad
