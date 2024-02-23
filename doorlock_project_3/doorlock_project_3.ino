@@ -1,81 +1,90 @@
+byte actualRFID[] = {0xC3, 0x56, 0x89, 0x15};
 
-#include "pins_arduino.h"
-#include <Keypad.h>
 
-#define unlock_button_pin A6
-#define solenoid_pin 2
-#define MAX_PASS_TIME 1000
-
-//----------------------------------------------------------------------------Keypad
-const byte rows = 4; // How many rows in keypad
-const byte cols = 4; // How many columns in keypad
-byte row_pins[rows] = {12, 11, 10, 9};  /*Pins for Keypad Rows*/
-byte col_pins[cols] = {8, 7, 6, 5};   /*Pins for Keypad Columns*/
-char Keys[rows][cols] = {
-  {'1', '2', '3', 'A'},
-  {'4', '5', '6', 'B'},
-  {'7', '8', '9', 'C'},
-  {'*', '0', '#', 'D'},
-};
-Keypad myKeypad = Keypad(makeKeymap(Keys), row_pins, col_pins, rows, cols); 
-
-//--------------------------------------------------------------------------Passcode
-const int passcodeLength = 4;
-int master_code = 1234;
-int input_code = 0; // handle corner case of 0000
-int pass_input_now = 0; // how many digits have been input
-int pass_timer;
-int otp_num = -1; //number of otp
-int otp[10];
-
-void setup() {
-  Serial.begin(9600);
-  pinMode(unlock_button_pin, INPUT);
-  pinMode(solenoid_pin, OUTPUT);
+void checkMasterCode(){  
+  if(input_code == master_code){
+    unlockDoor();
+    Serial.println("Master code matched");
+  }
+  else{
+    Serial.println("Wrong code");
+  }
 }
 
-void loop() {
-  
-  //Serial.println(Read_button_state());
-  
-  if (readBtnState())
+void checkOTP(){
+  if(otp_num == -1) return;
+  for(int i = 0; i<= otp_num; ++i)
   {
+    if(input_code == otp[i]);
+    
+  }
+}
+int readBtnState(){
+  if(!analogRead(unlock_button_pin))
+  {
+    return 1;
+  }else
+  {
+    return 0;
+  }
+}
+
+
+void unlockDoor() //unlocks the door and then lock the door again after a certain time
+{
+  digitalWrite(solenoid_pin, HIGH);
+  digitalWrite(13, HIGH);
+  
+  delay(2000);
+  digitalWrite(solenoid_pin, LOW);
+  digitalWrite(13, LOW);
+}
+
+void lockDoor(){
+  digitalWrite(solenoid_pin, LOW);  
+}
+
+void ReadRFID(){
+
+  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+  if ( ! rfid.PICC_IsNewCardPresent())
+    return;
+
+  // Verify if the NUID has been readed
+  if ( ! rfid.PICC_ReadCardSerial())
+    return;
+
+  for (byte i = 0; i < 4; i++) {
+      nuidPICC[i] = rfid.uid.uidByte[i];
+    }
+
+
+
+   
+    Serial.println(F("The NUID tag is:"));
+    Serial.print(F("In hex: "));
+    printHex(rfid.uid.uidByte, rfid.uid.size);
+    Serial.println();
+    Serial.print(F("In dec: "));
+    printDec(rfid.uid.uidByte, rfid.uid.size);
+    Serial.println();
+
+    if (actualRFID[0] == nuidPICC[0] && 
+    actualRFID[1] == nuidPICC[1] && 
+    actualRFID[2] == nuidPICC[2] && 
+    actualRFID[3] == nuidPICC[3] ) {
+    Serial.println(F("Door Open"));
     unlockDoor();
-  }
-  //-------------------------------------------------------------------Keypad
-  else if (char Key = myKeypad.getKey())
-  {
-    Serial.println(Key);
-    if(pass_input_now ==0) pass_timer = millis();
+    }
     else{
-      if((millis()-pass_timer) > MAX_PASS_TIME)
-      pass_input_now = 0;
-      input_code = 0;
+    Serial.println(F("Wrong RFID"));
     }
-    pass_input_now = pass_input_now + 1;
-    input_code = input_code * 10 + Key - '0';
-    Serial.println(input_code);
-    if (pass_input_now == passcodeLength) {
-      pass_input_now = 0;
-      checkMasterCode();
-      input_code = 0;
-    }
-  }
-  //---------------------------------------------------------------------OTP
-  else if (Serial.available())
-  {
-    String input = Serial.readString();
-    input.trim();
-    Serial.println(input);
-    if(input == "otp")
-    {
-      randomSeed(millis());
-      otp_num++;
-      otp[otp_num] = randNumber(1000,9999);
-      Serial.println(otp[otp_num]);
-      //need to include timeout 
-    }
-    input = "";
-  }
   
+
+
+  // Halt PICC
+  rfid.PICC_HaltA();
+
+  // Stop encryption on PCD
+  rfid.PCD_StopCrypto1();
 }
